@@ -3,10 +3,6 @@ python:
   - '3.6'
 services:
   - postgresql
-env:
-  global:
-    -DATABASE_URL=postgres://postgres:qwerty@localhost:5432/authentication
-    -DB=authentication
 install:
   - pip3 install -r requirements.txt
   - pip3 install coverage
