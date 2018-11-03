@@ -44,7 +44,8 @@ class DatabaseConnection(metaclass=Singleton):
                     self.conn.autocommit = False
                 else:
                     self.schema = schema
-                    self.conn = pg.connect(database_url,
+                    test_schema = 'postgres://postgres/authentication'
+                    self.conn = pg.connect(test_schema,
                                            cursor_factory=RealDictCursor,
                                            options=f'-c search_path={self.schema}')
                     cur = self.conn.cursor()
