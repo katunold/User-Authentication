@@ -44,8 +44,7 @@ class DatabaseConnection(metaclass=Singleton):
                     self.conn.autocommit = False
                 else:
                     self.schema = schema
-                    test_schema = 'postgres://postgres/authentication'
-                    self.conn = pg.connect(test_schema,
+                    self.conn = pg.connect(database_url,
                                            cursor_factory=RealDictCursor,
                                            options=f'-c search_path={self.schema}')
                     cur = self.conn.cursor()
@@ -179,14 +178,4 @@ class DatabaseConnection(metaclass=Singleton):
                 return val
         return None
 
-    def drop_test_schema(self):
-        """
-        delete test schema after using it
-        :return:
-        """
-        cur = self._conn_.cursor()
-        cur.execute("""DROP SCHEMA test CASCADE""")
-#        cur.execute("""DELETE FROM test.orders""")
-#        cur.execute("""DELETE FROM test.user""")
-#        cur.execute("""DELETE FROM test.blacklist_token""")
-        self._conn_.commit()
+
