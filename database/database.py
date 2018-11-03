@@ -98,7 +98,6 @@ class DatabaseConnection(metaclass=Singleton):
         """
         if app.config['TESTING']:
             self.schema = TestingConfig.SCHEMA_TESTING
-            self._conn_.autocommit = True
         else:
             self.schema = DevelopmentConfig.SCHEMA_PRODUCTION
 
