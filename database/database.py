@@ -44,7 +44,11 @@ class DatabaseConnection(metaclass=Singleton):
                     self.conn.autocommit = False
                 else:
                     self.schema = schema
-                    self.conn = pg.connect(user="postgres", database="authentication",
+                    self.conn = pg.connect(database="authentication",
+                                           user="postgres",
+                                           password="qwerty",
+                                           host="127.0.0.1",
+                                           port="5432",
                                            cursor_factory=RealDictCursor,
                                            options=f'-c search_path={self.schema}')
                     cur = self.conn.cursor()
