@@ -7,8 +7,6 @@ install:
   - pip3 install -r requirements.txt
   - pip3 install coverage
   - pip3 install coveralls
-before_script:
-  - psql -c "CREATE DATABASE authentication;" -U postgres
 script:
   - pytest --cov=api
   - coverage report
