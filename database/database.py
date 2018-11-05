@@ -46,9 +46,9 @@ class DatabaseConnection(metaclass=Singleton):
                     self.schema = schema
                     self.conn = pg.connect(database="authentication",
                                            user="postgres",
-                                           password="qwerty",
-                                           host="127.0.0.1",
-                                           port="5432",
+                                           # password="qwerty",
+                                           # host="127.0.0.1",
+                                           # port="5432",
                                            cursor_factory=RealDictCursor,
                                            options=f'-c search_path={self.schema}')
                     cur = self.conn.cursor()
@@ -59,13 +59,15 @@ class DatabaseConnection(metaclass=Singleton):
 #                    print("Just connected to " + self.schema)
                     self.conn.autocommit = False
             except pg.OperationalError:
-                conn = pg.connect(user="postgres", password="qwerty", host="127.0.0.1", port="5432")
-                conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-                cur = conn.cursor()
+
                 if app.config['TESTING']:
-                    cur.execute("CREATE DATABASE %s ;" % database)
-                    print('connecting to %s ...' % database)
-                    conn = pg.connect(database_url,
+                    # conn = pg.connect(user="postgres", password="qwerty", host="127.0.0.1", port="5432")
+                    # conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+                    # cur = conn.cursor()
+                    # cur.execute("CREATE DATABASE %s ;" % database)
+                    # print('connecting to %s ...' % database)
+                    conn = pg.connect(database="authentication",
+                                      user="postgres",
                                       cursor_factory=RealDictCursor,
                                       options=f'-c search_path={self.schema}')
                     cur = conn.cursor()
@@ -77,6 +79,9 @@ class DatabaseConnection(metaclass=Singleton):
                     conn.close()
                     print("Successfully connected to schema "+self.schema)
                 else:
+                    conn = pg.connect(user="postgres", password="qwerty", host="127.0.0.1", port="5432")
+                    conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+                    cur = conn.cursor()
                     cur.execute("CREATE DATABASE %s ;" % database)
                     print('connecting to %s ...' % database)
                     conn = pg.connect(database_url,
