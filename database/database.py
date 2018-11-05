@@ -57,7 +57,7 @@ class DatabaseConnection(metaclass=Singleton):
 
                     self.conn.commit()
 #                    print("Just connected to " + self.schema)
-                    self.conn.autocommit = False
+                    self.conn.autocommit = True
             except pg.OperationalError:
 
                 if app.config['TESTING']:
@@ -68,6 +68,9 @@ class DatabaseConnection(metaclass=Singleton):
                     # print('connecting to %s ...' % database)
                     conn = pg.connect(database="authentication",
                                       user="postgres",
+                                      password="qwerty",
+                                      host="127.0.0.1",
+                                      port="5432",
                                       cursor_factory=RealDictCursor,
                                       options=f'-c search_path={self.schema}')
                     cur = conn.cursor()
