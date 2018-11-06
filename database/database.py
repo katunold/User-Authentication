@@ -46,9 +46,9 @@ class DatabaseConnection(metaclass=Singleton):
                     self.schema = schema
                     self.conn = pg.connect(database="authentication",
                                            user="postgres",
-                                           # password="qwerty",
-                                           # host="127.0.0.1",
-                                           # port="5432",
+                                           password="qwerty",
+                                           host="127.0.0.1",
+                                           port="5432",
                                            cursor_factory=RealDictCursor,
                                            options=f'-c search_path={self.schema}')
                     cur = self.conn.cursor()
@@ -61,11 +61,11 @@ class DatabaseConnection(metaclass=Singleton):
             except pg.OperationalError:
 
                 if app.config['TESTING']:
-                    # conn = pg.connect(user="postgres", password="qwerty", host="127.0.0.1", port="5432")
-                    # conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-                    # cur = conn.cursor()
-                    # cur.execute("CREATE DATABASE %s ;" % database)
-                    # print('connecting to %s ...' % database)
+                    conn = pg.connect(user="postgres", password="qwerty", host="127.0.0.1", port="5432")
+                    conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+                    cur = conn.cursor()
+                    cur.execute("CREATE DATABASE %s ;" % database)
+                    print('connecting to %s ...' % database)
                     conn = pg.connect(database="authentication",
                                       user="postgres",
                                       password="qwerty",
