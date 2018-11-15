@@ -58,46 +58,47 @@ class DatabaseConnection(metaclass=Singleton):
                     self.conn.commit()
 #                    print("Just connected to " + self.schema)
                     self.conn.autocommit = True
-            except pg.OperationalError:
+            except pg.OperationalError as e:
+                print(e)
 
-                if app.config['TESTING']:
-                    conn = pg.connect(user="postgres", password="qwerty", host="127.0.0.1", port="5432")
-                    conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-                    cur = conn.cursor()
-                    cur.execute("CREATE DATABASE %s ;" % database)
-                    print('connecting to %s ...' % database)
-                    conn = pg.connect(database="authentication",
-                                      user="postgres",
-                                      password="qwerty",
-                                      host="127.0.0.1",
-                                      port="5432",
-                                      cursor_factory=RealDictCursor,
-                                      options=f'-c search_path={self.schema}')
-                    cur = conn.cursor()
-                    print("Successfully connected")
-
-                    self.create_tables.create_test_tables(cur)
-
-                    conn.commit()
-                    conn.close()
-                    print("Successfully connected to schema "+self.schema)
-                else:
-                    conn = pg.connect(user="postgres", password="qwerty", host="127.0.0.1", port="5432")
-                    conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-                    cur = conn.cursor()
-                    cur.execute("CREATE DATABASE %s ;" % database)
-                    print('connecting to %s ...' % database)
-                    conn = pg.connect(database_url,
-                                      cursor_factory=RealDictCursor,
-                                      options=f'-c search_path={self.schema}')
-                    cur = conn.cursor()
-                    print("Successfully connected")
-
-                    self.create_tables.create_production_tables(cur)
-
-                    conn.commit()
-                    conn.close()
-                    print("Successfully connected to schema " + self.schema)
+                # if app.config['TESTING']:
+                #     conn = pg.connect(user="postgres", password="qwerty", host="127.0.0.1", port="5432")
+                #     conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+                #     cur = conn.cursor()
+                #     cur.execute("CREATE DATABASE %s ;" % database)
+                #     print('connecting to %s ...' % database)
+                #     conn = pg.connect(database="authentication",
+                #                       user="postgres",
+                #                       password="qwerty",
+                #                       host="127.0.0.1",
+                #                       port="5432",
+                #                       cursor_factory=RealDictCursor,
+                #                       options=f'-c search_path={self.schema}')
+                #     cur = conn.cursor()
+                #     print("Successfully connected")
+                #
+                #     self.create_tables.create_test_tables(cur)
+                #
+                #     conn.commit()
+                #     conn.close()
+                #     print("Successfully connected to schema "+self.schema)
+                # else:
+                #     conn = pg.connect(user="postgres", password="qwerty", host="127.0.0.1", port="5432")
+                #     conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+                #     cur = conn.cursor()
+                #     cur.execute("CREATE DATABASE %s ;" % database)
+                #     print('connecting to %s ...' % database)
+                #     conn = pg.connect(database_url,
+                #                       cursor_factory=RealDictCursor,
+                #                       options=f'-c search_path={self.schema}')
+                #     cur = conn.cursor()
+                #     print("Successfully connected")
+                #
+                #     self.create_tables.create_production_tables(cur)
+                #
+                #     conn.commit()
+                #     conn.close()
+                #     print("Successfully connected to schema " + self.schema)
 
         def __exit__(self, exc_type, exc_val, exc_tb):
             self.conn.close()
